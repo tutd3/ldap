@@ -1,0 +1,23 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: ldap-staging
+  namespace: argocd
+spec:
+  project: argo-tutde
+  source:
+    repoURL: 'https://github.com/tutd3/ldap.git'
+    path: chart
+    targetRevision: HEAD
+    helm:
+      releaseName: ldap
+      valueFiles:
+        - values-staging.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: ldap
+  syncPolicy:
+    automated: {}
+    syncOptions:
+      - CreateNamespace=true
+      - PruneLast=true
